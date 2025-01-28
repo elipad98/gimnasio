@@ -1,7 +1,6 @@
 package com.gym.gimnasio.Asistencia.model;
 
 import com.gym.gimnasio.Miembro.model.Miembro;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
