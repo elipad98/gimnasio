@@ -1,6 +1,6 @@
 package com.gym.gimnasio.Asistencia.model;
 
-import com.gym.gimnasio.Miembro.model.Miembro;
+import com.gym.gimnasio.Miembro.model.MiembroDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Asistencia {
     private Long asistenciaId;
-    private Miembro miembro;
+    private MiembroDTO miembro;
 
     private LocalDateTime fechaEntrada = LocalDateTime.now();
     private LocalDateTime fechaSalida;
