@@ -1,6 +1,6 @@
 package com.gym.gimnasio.Membresia.model;
 
-import com.gym.gimnasio.Miembro.model.Miembro;
+import com.gym.gimnasio.Miembro.model.MiembroDTO;
 import com.gym.gimnasio.TiposMembresia.model.TipoMembresia;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class Membresia {
 
     @ManyToOne
     @JoinColumn(name = "miembro_id", nullable = false)
-    private Miembro miembro;
+    private MiembroDTO miembro;
 
     @ManyToOne
     @JoinColumn(name = "tipo_id", nullable = false)

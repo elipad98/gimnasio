@@ -1,6 +1,6 @@
 package com.gym.gimnasio.HistorialCambios.model;
 
-import com.gym.gimnasio.Miembro.model.Miembro;
+import com.gym.gimnasio.Miembro.model.MiembroDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ public class HistorialCambio {
 
 
     private Long historialId;
-    private Miembro miembro;
+    private MiembroDTO miembro;
     private String tipoCambio;  // 'renovación', 'cancelación', 'cambio de plan'
     private LocalDateTime fechaCambio = LocalDateTime.now();
     private String descripcion;
