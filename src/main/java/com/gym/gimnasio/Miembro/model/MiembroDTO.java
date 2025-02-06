@@ -1,23 +1,11 @@
 package com.gym.gimnasio.Miembro.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import java.time.LocalDate;
 
-@Setter
-@Getter
-@Entity
+@Data
 public class MiembroDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long miembroId;
-
     private String nombre;
     private String apellido;
     private LocalDate fechaNacimiento;

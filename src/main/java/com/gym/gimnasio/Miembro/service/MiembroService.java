@@ -40,7 +40,7 @@ public class MiembroService {
     public MiembroDTO actualizarMiembro(Long id, MiembroDTO miembroDTO) {
         return miembroRepository.findById(id)
                 .map(miembro -> {
-                    miembro.setNombre(miembroDTO        .getNombre());
+                    miembro.setNombre(miembroDTO.getNombre());
                     miembro.setApellido(miembroDTO.getApellido());
                     miembro.setFechaNacimiento(miembroDTO.getFechaNacimiento());
                     miembro.setTelefono(miembroDTO.getTelefono());

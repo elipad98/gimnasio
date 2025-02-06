@@ -1,5 +1,6 @@
 package com.gym.gimnasio.TiposMembresia.model;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,7 +11,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class TipoMembresia {
+@Entity
+public class TipoMembresiaDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
