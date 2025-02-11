@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "TiposMembresia")
+@Table(name = "tiposmembresia")
 public class TipoMembresia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tipo_id")
+    @Column(name = "tipo_id", nullable = false)
     private Long tipoId;
 
     @Column(name = "nombre", nullable = false, length = 50)
