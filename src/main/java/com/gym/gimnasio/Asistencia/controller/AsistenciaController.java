@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -48,5 +49,10 @@ public class AsistenciaController {
     public ResponseEntity<Void> eliminarAsistencia(@PathVariable Long id) {
         asistenciaService.eliminarAsistencia(id);
         return ResponseEntity.noContent().build();
+    }
+    // GET: Obtener estadisticas de asistencia por mes, semana y dia
+    @GetMapping("/estadisticas")
+    public Map<String, Object> obtenerEstadisticas(@RequestParam String rango) {
+        return asistenciaService.obtenerEstadisticas(rango);
     }
 }
