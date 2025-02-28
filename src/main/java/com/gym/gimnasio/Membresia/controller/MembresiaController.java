@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/membresias")
+@RequestMapping("/api/membresias")
 public class MembresiaController {
     @Autowired
     private MembresiaService membresiaService;

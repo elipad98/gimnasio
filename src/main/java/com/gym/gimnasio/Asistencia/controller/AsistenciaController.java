@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/asistencia")
+@RequestMapping("/api/asistencia")
 public class AsistenciaController {
 
     @Autowired

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/historial-cambios")
+@RequestMapping("/api/historial-cambios")
 public class HistorialCambiosController {
 
     @Autowired
