@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -47,5 +49,16 @@ public class MembresiaController {
     public ResponseEntity<Void> eliminarMembresia(@PathVariable Long id) {
         membresiaService.eliminarMembresia(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/distribucion")
+    public List<Object[]> obtenerDistribucionPorTipoYMes(
+            @RequestParam int anio,
+            @RequestParam int mes) {
+        return membresiaService.obtenerDistribucionPorTipoYMes(anio, mes);
+    }
+    @GetMapping("/distribucion-tipos")
+    public Map<String, Long> getDistribucionTiposMembresia() {
+        return membresiaService.getDistribucionTiposMembresia();
     }
 }
