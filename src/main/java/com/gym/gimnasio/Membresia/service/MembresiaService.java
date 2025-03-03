@@ -10,9 +10,13 @@ import com.gym.gimnasio.TiposMembresia.repository.TipoMembresiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MembresiaService {
@@ -92,4 +96,17 @@ public class MembresiaService {
     public void eliminarMembresia(Long id) {
         membresiaRepository.deleteById(id);
     }
+
+    public List<Object[]> obtenerDistribucionPorTipoYMes(int anio, int mes) {
+        return membresiaRepository.findDistribucionPorTipoYMes(anio, mes);
+    }
+    public Map<String, Long> getDistribucionTiposMembresia() {
+        return membresiaRepository.countByTipoMembresia()
+                .stream()
+                .collect(Collectors.toMap(
+                        result -> (String) result[0],  // Nombre del tipo de membresía
+                        result -> (Long) result[1]    // Cantidad de membresías de este tipo
+                ));
+    }
+
 }
