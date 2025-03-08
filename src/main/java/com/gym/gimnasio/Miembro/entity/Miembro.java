@@ -1,5 +1,7 @@
 package com.gym.gimnasio.Miembro.entity;
 
+import com.gym.gimnasio.Miembro.model.Sexo;
+import com.gym.gimnasio.Usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -27,18 +29,25 @@ public class Miembro {
     @Column(name = "telefono", length = 15)
     private String telefono;
 
-    @Column(name = "email", length = 100)
+    @Column(name = "email", length = 100, unique = true)
     private String email;
 
     @Column(name = "direccion", columnDefinition = "TEXT")
     private String direccion;
 
     @Column(name = "fecha_registro", updatable = false)
-    private LocalDate fechaRegistro = LocalDate.now(); // Valor por defecto
+    private LocalDate fechaRegistro = LocalDate.now();
 
     @Column(name = "estado")
-    private Boolean estado = true; // Valor por defecto
+    private Boolean estado = true;
 
     @Column(name = "notas", columnDefinition = "TEXT")
     private String notas;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sexo", length = 20)
+    private Sexo sexo;
+
+    @OneToOne(mappedBy = "miembro")
+    private Usuario usuario; // Relación con la tabla de usuarios
 }

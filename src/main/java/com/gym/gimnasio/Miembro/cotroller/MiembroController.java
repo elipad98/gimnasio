@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/miembros")
@@ -46,5 +47,16 @@ public class MiembroController {
     public ResponseEntity<Void> eliminarMiembro(@PathVariable Long id) {
         miembroService.eliminarMiembro(id);
         return ResponseEntity.noContent().build();
+    }
+    //Obtener miembros activos y inactivos
+    @GetMapping("/estadisticas-activos-inactivos")
+    public Map<String, Double> getEstadisticasActivosInactivos() {
+        return miembroService.calcularEstadisticasActivosInactivos();
+    }
+
+    @GetMapping("/conteo-por-sexo")
+    public ResponseEntity<Map<String, Long>> obtenerConteoPorSexo() {
+        Map<String, Long> conteo = miembroService.obtenerConteoPorSexo();
+        return ResponseEntity.ok(conteo);
     }
 }
