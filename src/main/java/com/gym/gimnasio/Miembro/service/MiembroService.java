@@ -2,11 +2,14 @@ package com.gym.gimnasio.Miembro.service;
 
 import com.gym.gimnasio.Miembro.entity.Miembro;
 import com.gym.gimnasio.Miembro.model.MiembroDTO;
+import com.gym.gimnasio.Miembro.model.Sexo;
 import com.gym.gimnasio.Miembro.repository.MiembroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,6 +51,7 @@ public class MiembroService {
                     miembro.setDireccion(miembroDTO.getDireccion());
                     miembro.setEstado(miembroDTO.getEstado());
                     miembro.setNotas(miembroDTO.getNotas());
+                    miembro.setSexo(miembroDTO.getSexo());
                     miembro = miembroRepository.save(miembro);
                     return convertirADTO(miembro);
                 })
@@ -70,6 +74,7 @@ public class MiembroService {
         dto.setEmail(miembro.getEmail());
         dto.setDireccion(miembro.getDireccion());
         dto.setFechaRegistro(miembro.getFechaRegistro());
+        dto.setSexo(miembro.getSexo());
         dto.setEstado(miembro.getEstado());
         dto.setNotas(miembro.getNotas());
         return dto;
@@ -84,7 +89,47 @@ public class MiembroService {
         miembro.setEmail(dto.getEmail());
         miembro.setDireccion(dto.getDireccion());
         miembro.setEstado(dto.getEstado());
+        miembro.setSexo(dto.getSexo());
         miembro.setNotas(dto.getNotas());
         return miembro;
+    }
+
+    public Map<String, Double> calcularEstadisticasActivosInactivos() {
+        long totalMiembros = miembroRepository.count();
+        long totalActivos = miembroRepository.countByEstado(true);
+        long totalInactivos = miembroRepository.countByEstado(false);
+
+//        double porcentajeActivos = (totalMiembros > 0) ? (totalActivos * 100.0) / totalMiembros : 0;
+//        double porcentajeInactivos = (totalMiembros > 0) ? (totalInactivos * 100.0) / totalMiembros : 0;
+//
+//        // Redondear a un número entero
+//        porcentajeActivos = Math.round(porcentajeActivos);
+//        porcentajeInactivos = Math.round(porcentajeInactivos);
+        double activos = (double) totalActivos;
+        double inactivos =(double) totalInactivos;
+        double total = (double) totalMiembros;
+        Map<String, Double> estadisticas = new HashMap<>();
+        estadisticas.put("activos", activos);
+        estadisticas.put("inactivos", inactivos);
+        estadisticas.put("total",total);
+
+
+        return estadisticas;
+    }
+    public Map<String, Long> obtenerConteoPorSexo() {
+        List<Object[]> resultados = miembroRepository.contarPorSexo();
+        Map<String, Long> conteoPorSexo = new HashMap<>();
+
+        conteoPorSexo.put("MASCULINO", 0L);
+        conteoPorSexo.put("FEMENINO", 0L);
+        conteoPorSexo.put("OTRO", 0L);
+
+        for (Object[] resultado : resultados) {
+            Sexo sexo = (Sexo) resultado[0]; // Usa Sexo directamente, no Miembro.Sexo
+            Long cantidad = (Long) resultado[1];
+            conteoPorSexo.put(sexo.name(), cantidad);
+        }
+
+        return conteoPorSexo;
     }
 }

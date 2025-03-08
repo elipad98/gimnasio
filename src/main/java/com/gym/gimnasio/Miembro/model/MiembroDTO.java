@@ -14,5 +14,6 @@ public class MiembroDTO {
     private String direccion;
     private LocalDate fechaRegistro = LocalDate.now();
     private Boolean estado = true;
+    private Sexo sexo;
     private String notas;
 }
