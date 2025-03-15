@@ -55,4 +55,15 @@ public class AsistenciaController {
     public Map<String, Object> obtenerEstadisticas(@RequestParam String rango) {
         return asistenciaService.obtenerEstadisticas(rango);
     }
+    @GetMapping("/total-dia-actual")
+    public ResponseEntity<Long> obtenerAsistenciasDiaActual() {
+        Long total = asistenciaService.obtenerAsistenciasDiaActual();
+        return ResponseEntity.ok(total);
+    }
+
+    @GetMapping("/top-frecuentes")
+    public ResponseEntity<List<AsistenciaService.TopMiembroFrecuente>> obtenerTopMiembrosFrecuentes() {
+        List<AsistenciaService.TopMiembroFrecuente> resultado = asistenciaService.obtenerTopMiembrosFrecuentes();
+        return ResponseEntity.ok(resultado);
+    }
 }

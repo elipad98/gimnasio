@@ -32,4 +32,21 @@ public interface AsistenciaRepository extends JpaRepository<Asistencia, Long> {
     // Obtener asistencias por mes del año
     @Query("SELECT MONTH(a.fechaEntrada) AS mes, COUNT(a) AS cantidad FROM Asistencia a WHERE YEAR(a.fechaEntrada) = YEAR(:fecha) GROUP BY MONTH(a.fechaEntrada)")
     List<Object[]> countAsistenciasPorMesdelAno(@Param("fecha") LocalDateTime fecha);
+
+    @Query("SELECT COUNT(a) FROM Asistencia a " +
+            "WHERE a.fechaEntrada >= :inicioDia " +
+            "AND a.fechaEntrada < :finDia")
+    Long countAsistenciasDiaActual(LocalDateTime inicioDia, LocalDateTime finDia);
+
+    @Query(value = "SELECT " +
+            "m.miembro_id, " +
+            "m.nombre, " +
+            "m.apellido, " +
+            "COUNT(a.asistencia_id) AS total_asistencias " +
+            "FROM asistencia a " +
+            "JOIN miembros m ON a.miembro_id = m.miembro_id " +
+            "GROUP BY m.miembro_id, m.nombre, m.apellido " +
+            "ORDER BY total_asistencias DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> obtenerTopMiembrosFrecuentes();
 }

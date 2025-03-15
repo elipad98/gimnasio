@@ -59,4 +59,22 @@ public class MiembroController {
         Map<String, Long> conteo = miembroService.obtenerConteoPorSexo();
         return ResponseEntity.ok(conteo);
     }
+    @GetMapping("/total-activos")
+    public ResponseEntity<Long> obtenerTotalMiembrosActivos() {
+        Long total = miembroService.obtenerTotalMiembrosActivos();
+        return ResponseEntity.ok(total);
+    }
+
+    @GetMapping("/nuevos-por-mes")
+    public ResponseEntity<List<MiembroService.MiembroPorMes>> obtenerMiembrosPorMes(
+            @RequestParam(required = false) Integer year) {
+        List<MiembroService.MiembroPorMes> resultado = miembroService.obtenerMiembrosPorMes(year);
+        return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/distribucion-edades")
+    public ResponseEntity<List<MiembroService.RangoEdad>> obtenerDistribucionEdades() {
+        List<MiembroService.RangoEdad> resultado = miembroService.obtenerDistribucionEdades();
+        return ResponseEntity.ok(resultado);
+    }
 }
