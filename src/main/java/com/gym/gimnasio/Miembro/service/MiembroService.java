@@ -4,13 +4,12 @@ import com.gym.gimnasio.Miembro.entity.Miembro;
 import com.gym.gimnasio.Miembro.model.MiembroDTO;
 import com.gym.gimnasio.Miembro.model.Sexo;
 import com.gym.gimnasio.Miembro.repository.MiembroRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +46,6 @@ public class MiembroService {
                     miembro.setApellido(miembroDTO.getApellido());
                     miembro.setFechaNacimiento(miembroDTO.getFechaNacimiento());
                     miembro.setTelefono(miembroDTO.getTelefono());
-                    miembro.setEmail(miembroDTO.getEmail());
                     miembro.setDireccion(miembroDTO.getDireccion());
                     miembro.setEstado(miembroDTO.getEstado());
                     miembro.setNotas(miembroDTO.getNotas());
@@ -71,7 +69,6 @@ public class MiembroService {
         dto.setApellido(miembro.getApellido());
         dto.setFechaNacimiento(miembro.getFechaNacimiento());
         dto.setTelefono(miembro.getTelefono());
-        dto.setEmail(miembro.getEmail());
         dto.setDireccion(miembro.getDireccion());
         dto.setFechaRegistro(miembro.getFechaRegistro());
         dto.setSexo(miembro.getSexo());
@@ -86,7 +83,6 @@ public class MiembroService {
         miembro.setApellido(dto.getApellido());
         miembro.setFechaNacimiento(dto.getFechaNacimiento());
         miembro.setTelefono(dto.getTelefono());
-        miembro.setEmail(dto.getEmail());
         miembro.setDireccion(dto.getDireccion());
         miembro.setEstado(dto.getEstado());
         miembro.setSexo(dto.getSexo());
@@ -131,5 +127,97 @@ public class MiembroService {
         }
 
         return conteoPorSexo;
+    }
+
+    public Long obtenerTotalMiembrosActivos() {
+        return miembroRepository.countMiembrosActivos();
+    }
+
+    public List<MiembroPorMes> obtenerMiembrosPorMes(Integer year) {
+        // Usar el año actual si no se proporciona uno
+        int selectedYear = (year != null) ? year : LocalDate.now().getYear();
+
+        // Obtener los datos del repositorio
+        List<Object[]> resultados = miembroRepository.contarMiembrosPorMes(selectedYear);
+
+        // Crear una lista con todos los meses del año, inicializados en 0
+        List<MiembroPorMes> miembrosPorMes = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            miembrosPorMes.add(new MiembroPorMes(selectedYear, month, 0L));
+        }
+
+        // Combinar los datos recibidos del repositorio
+        for (Object[] resultado : resultados) {
+            Integer month = ((Number) resultado[0]).intValue();
+            Long count = ((Number) resultado[1]).longValue();
+            miembrosPorMes.set(month - 1, new MiembroPorMes(selectedYear, month, count)); // Reemplazar el mes correspondiente
+        }
+
+        return miembrosPorMes;
+    }
+
+    public static class MiembroPorMes {
+        private Integer year;
+        private Integer month;
+        private Long count;
+
+        public MiembroPorMes(Integer year, Integer month, Long count) {
+            this.year = year;
+            this.month = month;
+            this.count = count;
+        }
+
+        // Getters (necesarios para serialización a JSON)
+        public Integer getYear() {
+            return year;
+        }
+
+        public Integer getMonth() {
+            return month;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+    }
+
+    public List<RangoEdad> obtenerDistribucionEdades() {
+        List<Object[]> resultados = miembroRepository.obtenerDistribucionEdades();
+        List<RangoEdad> distribucion = new ArrayList<>();
+
+        String[] rangos = {"15-20", "21-30", "31-40", "41-50", "50+"};
+        int[] conteos = new int[rangos.length];
+
+        for (int i = 0; i < rangos.length; i++) {
+            conteos[i] = 0;
+        }
+
+        for (Object[] resultado : resultados) {
+            String rango = (String) resultado[0];
+            Long cantidad = (Long) resultado[1];
+            for (int i = 0; i < rangos.length; i++) {
+                if (rangos[i].equals(rango)) {
+                    conteos[i] = cantidad.intValue();
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < rangos.length; i++) {
+            distribucion.add(new RangoEdad(rangos[i], conteos[i]));
+        }
+
+        return distribucion;
+    }
+
+    @Data
+    public static class RangoEdad {
+        private String rango;
+        private int cantidad;
+
+        public RangoEdad(String rango, int cantidad) {
+            this.rango = rango;
+            this.cantidad = cantidad;
+        }
     }
 }

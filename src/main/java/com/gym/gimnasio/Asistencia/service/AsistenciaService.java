@@ -5,11 +5,14 @@ import com.gym.gimnasio.Asistencia.model.AsistenciaDTO;
 import com.gym.gimnasio.Asistencia.repository.AsistenciaRepository;
 import com.gym.gimnasio.Miembro.entity.Miembro;
 import com.gym.gimnasio.Miembro.repository.MiembroRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AsistenciaService {
@@ -164,5 +167,40 @@ public class AsistenciaService {
 
         // Convertir a lista
         return asistenciasPorMes.values().stream().toList();
+    }
+
+    public Long obtenerAsistenciasDiaActual() {
+        // Obtener el inicio y fin del día actual
+        LocalDate hoy = LocalDate.now();
+        LocalDateTime inicioDia = hoy.atStartOfDay();
+        LocalDateTime finDia = hoy.atTime(23, 59, 59);
+
+        return asistenciaRepository.countAsistenciasDiaActual(inicioDia, finDia);
+    }
+
+    public List<TopMiembroFrecuente> obtenerTopMiembrosFrecuentes() {
+        List<Object[]> resultados = asistenciaRepository.obtenerTopMiembrosFrecuentes();
+        return resultados.stream().map(resultado -> {
+            Long miembroId = ((Number) resultado[0]).longValue();
+            String nombre = (String) resultado[1];
+            String apellido = (String) resultado[2];
+            Long totalAsistencias = ((Number) resultado[3]).longValue();
+            return new TopMiembroFrecuente(miembroId, nombre, apellido, totalAsistencias.intValue());
+        }).collect(Collectors.toList());
+    }
+
+    @Data
+    public static class TopMiembroFrecuente {
+        private Long miembroId;
+        private String nombre;
+        private String apellido;
+        private int totalAsistencias;
+
+        public TopMiembroFrecuente(Long miembroId, String nombre, String apellido, int totalAsistencias) {
+            this.miembroId = miembroId;
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.totalAsistencias = totalAsistencias;
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -60,5 +61,23 @@ public class MembresiaController {
     @GetMapping("/distribucion-tipos")
     public Map<String, Long> getDistribucionTiposMembresia() {
         return membresiaService.getDistribucionTiposMembresia();
+    }
+
+    @GetMapping("/conteo-proximas-a-vencer/{dias}")
+    public ResponseEntity<Long> obtenerConteoMembresiasProximasAVencer(@PathVariable int dias) {
+        Long conteo = membresiaService.obtenerConteoMembresiasProximasAVencer(dias);
+        return ResponseEntity.ok(conteo);
+    }
+
+    @GetMapping("/ingresos-mes")
+    public ResponseEntity<BigDecimal> obtenerIngresosMesActual() {
+        BigDecimal ingresos = membresiaService.obtenerIngresosMesActual();
+        return ResponseEntity.ok(ingresos);
+    }
+
+    @GetMapping("/proximas-a-vencer")
+    public ResponseEntity<List<MembresiaService.MembresiaProximaAVencer>> obtenerMembresiasProximasAVencer() {
+        List<MembresiaService.MembresiaProximaAVencer> resultado = membresiaService.obtenerMembresiasProximasAVencer();
+        return ResponseEntity.ok(resultado);
     }
 }

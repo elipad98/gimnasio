@@ -1,9 +1,11 @@
 package com.gym.gimnasio.Miembro.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gym.gimnasio.Miembro.model.Sexo;
 import com.gym.gimnasio.Usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -29,9 +31,6 @@ public class Miembro {
     @Column(name = "telefono", length = 15)
     private String telefono;
 
-    @Column(name = "email", length = 100, unique = true)
-    private String email;
-
     @Column(name = "direccion", columnDefinition = "TEXT")
     private String direccion;
 
@@ -49,5 +48,8 @@ public class Miembro {
     private Sexo sexo;
 
     @OneToOne(mappedBy = "miembro")
-    private Usuario usuario; // Relación con la tabla de usuarios
+    @JsonBackReference
+    @ToString.Exclude // Excluye este campo del toString()
+    private Usuario usuario;
+
 }
